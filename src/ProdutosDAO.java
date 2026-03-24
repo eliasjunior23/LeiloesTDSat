@@ -23,14 +23,54 @@ public class ProdutosDAO {
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public void cadastrarProduto (ProdutosDTO produto){
+        String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
         
+        conn = new conectaDAO().connectDB();
         
+        try{
+            prep = conn.prepareStatement(sql);
+            
+            prep.setString(1, produto.getNome());
+            prep.setInt(2, produto.getValor());
+            prep.setString(3, produto.getStatus());
+            
+            prep.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+            
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + e.getMessage());
+        }
+                
+
         //conn = new conectaDAO().connectDB();
-        
-        
     }
     
     public ArrayList<ProdutosDTO> listarProdutos(){
+        
+        String sql = "SELECT * FROM produtos";
+        
+        conn = new conectaDAO().connectDB();
+        
+        try {
+            prep = conn.prepareStatement(sql);
+            resultset = prep.executeQuery();
+            
+            listagem = new ArrayList<>();
+            
+            while (resultset.next()) {
+                ProdutosDTO objProduto = new ProdutosDTO();
+                
+                objProduto.setId(resultset.getInt("id"));
+                objProduto.setNome(resultset.getString("nome"));
+                objProduto.setValor(resultset.getInt("valor"));
+                objProduto.setStatus(resultset.getString("status"));
+                
+                listagem.add(objProduto);
+            }
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Erro ao listar: " + e.getMessage());
+        }
         
         return listagem;
     }

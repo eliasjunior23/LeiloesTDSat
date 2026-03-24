@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -153,6 +154,27 @@ public class listagemVIEW extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    public void listarValores(){
+        try {
+            ProdutosDAO objDAO = new ProdutosDAO();
+            ArrayList<ProdutosDTO> lista = objDAO.listarProdutos();
+            
+            DefaultTableModel modelo = (DefaultTableModel) listaProdutos.getModel();
+            modelo.setNumRows(0);
+            
+            for (int i = 0; i < lista.size(); i++){
+                modelo.addRow(new Object[]{
+                    lista.get(i).getId(),
+                    lista.get(i).getNome(),
+                    lista.get(i).getValor(),
+                    lista.get(i).getStatus()
+                });
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao carregar tabela: " + e.getMessage());
+        }
+    }
     /**
      * @param args the command line arguments
      */
